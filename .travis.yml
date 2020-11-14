@@ -17,11 +17,14 @@ before_script:
 script:
   - npm test # test the code
   - npm run build-client # make the bundle
-# before_deploy:
-#   - rm -rf node_modules # omit from the tarball, since we skip cleanup
-# deploy:
-#   skip_cleanup: true # prevents travis from deleting the build
-#   provider: heroku
-#   app: corndotpop # see README
-#   api_key:
-#     secure: YOUR-***ENCRYPTED***-API-KEY-HERE # see README
+before_deploy: # omit node_modules, since we set skip_cleanup below
+  - rm -rf node_modules
+deploy: # see README for details on these keys
+  # prevents travis from deleting the build
+  skip_cleanup: true
+  provider: heroku
+  # app should be your heroku app name; see README
+  app: corndotpop
+  # the secure key indicates an encrypted value; see README
+  api_key:
+    secure: K7qDVPe4wLflk3ypw8sK5W0PtECq2EtX1bmUh+xSnw41+FYvgOaK+x0hCDYfUfiiMVQDCKQqmPFNCJ+QEen8YXm1qpXb31vKSsPzHdovQ0xtLQ+XZZxqmNYSVQWVa4EihkDGyfQBSMIXKCUdNOvpAKQCn+LdVNlzEdvFZBChsjaovh7CYFwAEfjFdoUbKq1TDOIppx2fNYFNkJbTtYYWrmm2wfFA8H7YO1CK8qKHRcI9ghCUqqwWrSQdiVx3ux+IyOd5ByrKeIJnAwI9IhXkgn8KKycfei2XndnbOJf0SIs2qDPYC8bx+w9sw9+lBwGifows4chP0I8AtnOEy4vxyxFgYAQri1YEthyaiZ0evQ/fDuL4QU83a2U1wtBW4hO/MexBF6N+1QvpkvVqHgvSqBm+CWTG8hw3iyRCoCYHb2DT6jAf1IKg7mjl6t7pGhaY+HBlyqF2en4r7lqeBCnru4LJMnv2ETQmyT5mA16yThpOxqvRfa4TH/eEM5PlQA2SxWqmzoTXkWnaYtG2PVpfIxUuLs3qIm/QBsVXRkL/cy+uqbWAkRW2ukJH2fPU+yMaQPeWFn/OrZRjCPPj+I6VRAMYTYwoFecr7xtT48G9ECHZh1mdpw0LTw82KhftgaPyQGk/43cqy2BoJhNVWqkmbxVEF4kvxFW/5szloR9K6UU=
