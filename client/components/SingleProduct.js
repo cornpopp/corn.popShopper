@@ -17,7 +17,7 @@ class SingleProduct extends React.Component {
     return (
       <div>
         {product.map(product => (
-          <div id="single-product">
+          <div id="single-product" key="single-product">
             <img id="single-product-img" src={product.image} />
             <h3>{product.name}</h3>
             <p>{product.origPrice}</p>
