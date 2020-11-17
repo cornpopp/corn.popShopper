@@ -17,7 +17,6 @@ router.get('/shopping_cart', async (req, res, next) => {
   try {
     console.log('req.user-->', req.user)
     if (req.user) {
-      console.log('req.user-->', req.user)
       const order = await Order.findOrCreate({
         where: {
           userId: req.user.dataValues.id,

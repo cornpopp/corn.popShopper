@@ -1,5 +1,7 @@
 const router = require('express').Router()
 const {Product} = require('../db/models')
+const isAdmin = require('../../helpers/isAdminHelperFunc')
+
 module.exports = router
 
 // GET /api/products
@@ -27,8 +29,10 @@ router.get('/:productId', async (req, res, next) => {
 // POST /api/products
 router.post('/', async (req, res, next) => {
   try {
-    const newProduct = await Product.create(req.body)
-    res.json(newProduct)
+    if (isAdmin) {
+      const newProduct = await Product.create(req.body)
+      res.json(newProduct)
+    }
   } catch (error) {
     next(error)
   }
@@ -37,10 +41,11 @@ router.post('/', async (req, res, next) => {
 // PUT /api/products/:productId
 router.put('/:productId', async (req, res, next) => {
   try {
-    console.log('router: productId = ', productId)
-    const product = await Product.findByPk(req.params.productId)
-    const updatedProduct = await product.update(req.body)
-    res.status(200).send(updatedProduct)
+    if (isAdmin) {
+      const product = await Product.findByPk(req.params.productId)
+      const updatedProduct = await product.update(req.body)
+      res.status(200).send(updatedProduct)
+    }
   } catch (error) {
     next(error)
   }
@@ -49,9 +54,11 @@ router.put('/:productId', async (req, res, next) => {
 // DELETE /api/products/:productId
 router.delete('/:productId', async (req, res, next) => {
   try {
-    const id = req.params.productId
-    await Product.destroy({where: {id}})
-    res.sendStatus(204)
+    if (isAdmin) {
+      const id = req.params.productId
+      await Product.destroy({where: {id}})
+      res.sendStatus(204)
+    }
   } catch (error) {
     next(error)
   }
