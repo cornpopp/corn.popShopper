@@ -10,6 +10,7 @@ export class CheckoutPage extends React.Component {
 
   render() {
     const products = this.props.order.products
+
     return (
       <div className="content-wrapper">
         <h1>Checkout</h1>
