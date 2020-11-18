@@ -56,15 +56,12 @@ export const addToCart = product => {
       console.log('in order thunk, addToCart order', order)
       console.log('in order thunk, addToCart order[0].id', order[0].id)
       const idOrder = order[0].id
-      // console.log('order id', idOrder)
       const orderProduct = await axios.post(
         `/api/orders/${idOrder}/products/${product.id}`,
         product
       )
       const action = addToCartAction(orderProduct)
       dispatch(action)
-      // const action = addToCartAction(order)
-      // dispatch(action)
     } catch (error) {
       console.error(error)
       console.error('ERROR adding product to cart in thunk!')
@@ -79,7 +76,6 @@ const initialState = {
 export default function ordersReducer(state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
-      console.log('orders reducer action.order = ', action.order)
       return action.order
 
     case ADD_TO_CART:
