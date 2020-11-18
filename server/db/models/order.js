@@ -16,6 +16,10 @@ const Order = db.define('order', {
       notEmpty: true,
       min: 0
     }
+  },
+  visitorId: {
+    type: Sequelize.STRING,
+    defaultValue: null
   }
   // orderNumber: {
   //   type: Sequelize.INTEGER,

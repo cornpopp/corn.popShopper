@@ -1,9 +1,15 @@
 const router = require('express').Router()
+const {connect} = require('..')
+// const session = require('express-session')
 const {Order, CartItem, Product} = require('../db/models')
+// const passport = require('passport')
+// const {sessionStore} = require('express-session')
+// const Session = require('../index')
 module.exports = router
 
 // GET /api/orders
 router.get('/', async (req, res, next) => {
+  console.log('api/orders')
   try {
     const orders = await Order.findAll()
     res.json(orders)
@@ -14,10 +20,9 @@ router.get('/', async (req, res, next) => {
 
 // GET /api/orders/shopping_cart
 router.get('/shopping_cart', async (req, res, next) => {
+  console.log('/api/orders/shopping_cart')
   try {
-    console.log('req.user-->', req.user)
     if (req.user) {
-      console.log('req.user-->', req.user)
       const order = await Order.findOrCreate({
         where: {
           userId: req.user.dataValues.id,
@@ -28,7 +33,21 @@ router.get('/shopping_cart', async (req, res, next) => {
       console.log('in orders route: ', order)
       res.json(order)
     } else {
-      res.sendStatus(404)
+      console.log('visitor')
+      console.log('in orders api routes req.cookies ', req.cookies)
+      const cookie = req.cookies['connect.sid']
+
+      console.log('cookie = ', cookie)
+
+      const order = await Order.findOrCreate({
+        where: {
+          visitorId: cookie,
+          submitted: false
+        },
+        include: Product
+      })
+      console.log('visitor order added/updated', order)
+      res.json(order)
     }
   } catch (error) {
     next(error)
@@ -37,6 +56,7 @@ router.get('/shopping_cart', async (req, res, next) => {
 
 //POST /api/orders/:orderId/products
 router.post('/:orderId/products/:productId', async (req, res, next) => {
+  console.log('/api/orders/:orderId/products')
   try {
     const orderItem = await CartItem.findOrCreate({
       where: {
