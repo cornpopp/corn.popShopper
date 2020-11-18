@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchSingleOrder} from '../store/orders'
+// import ShoppingCart from './ShoppingCart'
 
 export class CheckoutPage extends React.Component {
   componentDidMount() {
@@ -8,10 +9,32 @@ export class CheckoutPage extends React.Component {
   }
 
   render() {
+    const products = this.props.order.products
     return (
       <div className="content-wrapper">
         <h1>Checkout</h1>
         <h2>Items in Cart:</h2>
+        <div id="mappedproducts">
+          {products.length < 1
+            ? 'No Products In Your Cart'
+            : products.map(product => (
+                <div key={product.id} className="shopping-cart-item">
+                  <div className="row">
+                    <div className="column">{product.name}</div>
+                    <div className="column">${product.resellPrice}</div>
+                    <div className="column">
+                      <form>
+                        <label htmlFor="quantity" min="1">
+                          Quantity:{' '}
+                        </label>
+                        <input type="number" id="quantity" name="quantity" />
+                        <button type="submit">Remove Item</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              ))}
+        </div>
         <div className="border-box">
           <h3>Shipping Information</h3>
           <form id="shipping-info-form">
@@ -65,7 +88,7 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  getSingleOrder: orderId => dispatch(fetchSingleOrder(orderId))
+  getSingleOrder: () => dispatch(fetchSingleOrder())
 })
 
 export default connect(mapState, mapDispatch)(CheckoutPage)

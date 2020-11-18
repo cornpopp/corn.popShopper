@@ -79,7 +79,7 @@ const initialState = {
 export default function ordersReducer(state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
-      console.log('orders reducer action.order = ', action.order)
+      // console.log('orders reducer action.order = ', action.order)
       return action.order
 
     case ADD_TO_CART:
