@@ -6,8 +6,8 @@ module.exports = async function(userId) {
       isAdmin: true
     }
   })
-  const adminId = isAdmin[0].user.dataValues.id
-  console.log('userId: ', userId)
+  console.log('what is isAdmin: ', isAdmin)
+  const adminId = isAdmin[0].dataValues.id
 
   if (userId === adminId) {
     return true
