@@ -35,6 +35,7 @@ export class AllProducts extends React.Component {
                     product={product}
                     order={this.props.order}
                     handleClick={this.handleClick}
+                    quantity={this.props.quantity}
                   />
                 </div>
               ))}

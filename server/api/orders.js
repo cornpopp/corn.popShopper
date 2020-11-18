@@ -49,7 +49,7 @@ router.get('/shopping_cart', async (req, res, next) => {
   }
 })
 
-//POST /api/orders/:orderId/products
+//POST /api/orders/:orderId/products/:productId
 router.post('/:orderId/products/:productId', async (req, res, next) => {
   try {
     const orderItem = await CartItem.findOrCreate({
@@ -63,6 +63,44 @@ router.post('/:orderId/products/:productId', async (req, res, next) => {
     })
     console.log(orderItem)
     res.json(orderItem)
+  } catch (error) {
+    next(error)
+  }
+})
+//PUT /api/orders/:orderId/products/:productId
+router.put('/:orderId/products/:productId', async (req, res, next) => {
+  console.log('req.params.orderId from PUT--->', req.params.orderId)
+  console.log('req.params.productId from PUT --->', req.params.productId)
+  console.log('req.body.quantity from PUT--->', req.body.quantity)
+  console.log('req.body from PUT --->', req.body)
+  try {
+    await CartItem.update(
+      {
+        quantity: req.body.quantity
+      },
+      {
+        where: {
+          orderId: req.params.orderId,
+          productId: req.params.productId
+        }
+      }
+    )
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
+//DELETE /api/orders/:orderId/products/:productId
+router.delete('/:orderId/products/:productId', async (req, res, next) => {
+  try {
+    await CartItem.destroy({
+      where: {
+        orderId: req.params.orderId,
+        productId: req.params.productId
+      }
+    })
+    res.sendStatus(204)
   } catch (error) {
     next(error)
   }

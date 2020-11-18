@@ -1,9 +1,26 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchSingleOrder} from '../store/orders'
+import {
+  fetchSingleOrder,
+  setItemQuantity,
+  removeFromCart
+} from '../store/orders'
 
 export class ShoppingCart extends React.Component {
+  constructor() {
+    super()
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
+  }
+  handleDelete(orderId, productId) {
+    this.props.removeFromCart(orderId, productId)
+    this.props.fetchSingleOrder()
+  }
+  handleSubmit(product, quantity) {
+    this.props.setQuantity(product, quantity)
+    this.props.fetchSingleOrder()
+  }
   componentDidMount() {
     this.props.fetchSingleOrder()
   }
@@ -26,12 +43,38 @@ export class ShoppingCart extends React.Component {
                       <div className="column">{product.name}</div>
                       <div className="column">${product.resellPrice}</div>
                       <div className="column">
+                        Quantity: {product.cartItem.quantity}
+                      </div>
+                      <div className="column">
                         <form>
-                          <label htmlFor="quantity" min="1">
-                            Quantity:{' '}
-                          </label>
-                          <input type="number" id="quantity" name="quantity" />
-                          <button type="submit">Remove Item</button>
+                          <label htmlFor="quantity">Change Quantity: </label>
+                          <input
+                            type="number"
+                            id="quantity-form"
+                            name="quantity"
+                            min="0"
+                          />
+                          <button
+                            className="update-cart-button"
+                            type="button"
+                            onClick={() =>
+                              this.handleSubmit(
+                                product,
+                                document.getElementById('quantity-form').value
+                              )
+                            }
+                          >
+                            Update Cart
+                          </button>
+                          <button
+                            className="remove-button"
+                            type="button"
+                            onClick={() =>
+                              this.handleDelete(this.props.order.id, product.id)
+                            }
+                          >
+                            Remove Item
+                          </button>
                         </form>
                       </div>
                     </div>
@@ -48,12 +91,17 @@ export class ShoppingCart extends React.Component {
 }
 
 const mapState = state => ({
-  order: state.order
+  order: state.order,
+  quantity: state.quantity
 })
 
 const mapDispatch = dispatch => ({
   // addProductToCart: product => dispatch(addToCart(product)),
-  fetchSingleOrder: () => dispatch(fetchSingleOrder())
+  fetchSingleOrder: () => dispatch(fetchSingleOrder()),
+  setQuantity: (product, quantity) =>
+    dispatch(setItemQuantity(product, quantity)),
+  removeFromCart: (orderId, productId) =>
+    dispatch(removeFromCart(orderId, productId))
 })
 
 export default connect(mapState, mapDispatch)(ShoppingCart)
