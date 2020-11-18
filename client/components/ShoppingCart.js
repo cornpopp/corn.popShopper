@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-// import {addToCart} from '../store/products'
+import {Link} from 'react-router-dom'
 import {fetchSingleOrder} from '../store/orders'
 
 export class ShoppingCart extends React.Component {
@@ -38,7 +38,9 @@ export class ShoppingCart extends React.Component {
                   </div>
                 ))}
           </div>
-          <button type="submit">Go To Checkout</button>
+          <Link to="/checkout">
+            <button type="submit">Go To Checkout</button>
+          </Link>
         </div>
       </div>
     )
