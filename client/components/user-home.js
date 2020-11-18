@@ -21,7 +21,7 @@ export const UserHome = props => {
     )
   } else {
     return (
-      <div>
+      <div className="content-wrapper">
         <h3>Welcome {firstName}</h3>
         {/*UserAccountPage*/}
       </div>
